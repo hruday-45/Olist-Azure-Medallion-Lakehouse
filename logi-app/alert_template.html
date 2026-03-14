@@ -1,0 +1,53 @@
+<div
+  style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; border: 1px solid #e0e0e0; border-radius: 10px; padding: 25px; max-width: 600px; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+  <h2 style="color: #d9534f; margin-top: 0; border-bottom: 2px solid #d9534f; padding-bottom: 10px; font-size: 20px;">
+    🚨 Critical: Olist Pipeline Failure
+  </h2>
+
+  <p style="color: #333; font-size: 15px; line-height: 1.5;">
+    The automated <b>Olist Data Engine</b> has encountered an error. Please review the details below to begin
+    troubleshooting.
+  </p>
+
+  <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;">
+    <tbody>
+      <tr style="background-color: #fcfcfc;">
+        <td style="padding: 12px; border: 1px solid #eee; width: 30%;"><strong>Severity:</strong></td>
+        <td style="padding: 12px; border: 1px solid #eee; color: #d9534f; font-weight: bold;">High (Production)</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid #eee;"><strong>Master Pipeline:</strong></td>
+        <td style="padding: 12px; border: 1px solid #eee; font-family: 'Courier New', monospace;">
+          @{triggerBody()?['PipelineName']}</td>
+      </tr>
+      <tr style="background-color: #fcfcfc;">
+        <td style="padding: 12px; border: 1px solid #eee;"><strong>Data Factory:</strong></td>
+        <td style="padding: 12px; border: 1px solid #eee;">@{triggerBody()?['DataFactoryName']}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid #eee;"><strong>Run ID:</strong></td>
+        <td style="padding: 12px; border: 1px solid #eee; color: #666; font-size: 12px;">@{triggerBody()?['RunId']}</td>
+      </tr>
+      <tr style="background-color: #fff5f5;">
+        <td style="padding: 12px; border: 1px solid #eee; vertical-align: top;"><strong>Error Log:</strong></td>
+        <td
+          style="padding: 12px; border: 1px solid #eee; color: #b71c1c; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.4;">
+          @{triggerBody()?['ErrorMessage']}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="text-align: center; margin-top: 25px;">
+    <a href="https://portal.azure.com"
+      style="background-color: #0078d4; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block; font-size: 14px;">
+      View in Azure Monitor
+    </a>
+  </div>
+
+  <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;">
+  <p style="font-size: 11px; color: #999; text-align: center; margin-top: 10px;">
+    <b>Environment:</b> Production | <b>Project:</b> Olist Azure Medallion Lakehouse <br>
+    This is an automated system alert. Do not reply to this email.
+  </p>
+</div>

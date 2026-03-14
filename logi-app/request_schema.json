@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "DataFactoryName": {
+      "type": "string"
+    },
+    "PipelineName": {
+      "type": "string"
+    },
+    "ErrorMessage": {
+      "type": "string"
+    },
+    "RunId": {
+      "type": "string"
+    }
+  }
+}

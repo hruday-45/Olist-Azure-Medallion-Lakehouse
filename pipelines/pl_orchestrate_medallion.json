@@ -1,0 +1,72 @@
+{
+    "name": "pl_orchestrate_medallion",
+    "properties": {
+        "activities": [
+            {
+                "name": "pl_load_bronze_raw_ep",
+                "type": "ExecutePipeline",
+                "dependsOn": [],
+                "policy": {
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pl_load_bronze_raw",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "pl_transform_silver_standardized_ep",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "pl_load_bronze_raw_ep",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pl_transform_silver_standardized",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "pl_curated_gold_star_schema_ep",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "pl_transform_silver_standardized_ep",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pl_curated_gold_star_schema",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2026-03-13T16:04:42Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

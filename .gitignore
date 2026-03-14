@@ -1,0 +1,21 @@
+# Azure & Databricks specific
+.databricks/
+.azure/
+*.log
+
+# Python & System junk
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# IDE settings (VS Code/PyCharm)
+.vscode/
+.idea/
+
+# Security: Never upload actual credentials
+.env
+secrets.json
+*.checkpoint
+
+Master_Orchestration.ipynb

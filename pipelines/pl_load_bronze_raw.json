@@ -1,0 +1,55 @@
+{
+    "name": "Olist_Bronze_Pl",
+    "properties": {
+        "activities": [
+            {
+                "name": "bronze_empty_tables_nb",
+                "type": "DatabricksNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.00:30:00",
+                    "retry": 2,
+                    "retryIntervalInSeconds": 180,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/bronze/Creating_empty_tables_bronze_layer"
+                },
+                "linkedServiceName": {
+                    "referenceName": "Databricks_Olist",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "bronze_ingestion_nb",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "bronze_empty_tables_nb",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.00:10:00",
+                    "retry": 2,
+                    "retryIntervalInSeconds": 180,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/bronze/Ingesting_source_in_bronze_tables"
+                },
+                "linkedServiceName": {
+                    "referenceName": "Databricks_Olist",
+                    "type": "LinkedServiceReference"
+                }
+            }
+        ],
+        "annotations": []
+    }
+}

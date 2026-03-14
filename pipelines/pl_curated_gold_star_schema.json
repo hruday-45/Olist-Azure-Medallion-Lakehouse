@@ -1,0 +1,48 @@
+{
+    "name": "pl_curated_gold_star_schema",
+    "properties": {
+        "activities": [
+            {
+                "name": "Transformation_loop",
+                "type": "ForEach",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@createArray('olist_customers_dataset', 'olist_orders_dataset', 'olist_products_dataset', 'olist_sellers_dataset', 'olist_order_items_dataset', 'olist_order_payments_dataset', 'olist_order_reviews_dataset', 'olist_geolocation_dataset', 'product_category_name_translation')",
+                        "type": "Expression"
+                    },
+                    "activities": [
+                        {
+                            "name": "silver_transformation_nb",
+                            "type": "DatabricksNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.00:20:00",
+                                "retry": 2,
+                                "retryIntervalInSeconds": 180,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/silver/silver_transformation",
+                                "baseParameters": {
+                                    "table_name": {
+                                        "value": "@item()",
+                                        "type": "Expression"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "Databricks_Olist",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "annotations": []
+    }
+}

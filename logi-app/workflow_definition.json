@@ -1,0 +1,72 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "When_an_HTTP_request_is_received": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "DataFactoryName": {
+                                "type": "string"
+                            },
+                            "PipelineName": {
+                                "type": "string"
+                            },
+                            "ErrorMessage": {
+                                "type": "string"
+                            },
+                            "RunId": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "actions": {
+            "Send_email_(V2)": {
+                "runAfter": {},
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['gmail-1']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "body": {
+                        "To": "[YOUR_EMAIL]",
+                        "Subject": "Pipeline Failed",
+                        "Body": "<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; border: 1px solid #e0e0e0; border-radius: 10px; padding: 25px; max-width: 600px; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);\">\n  <h2 style=\"color: #d9534f; margin-top: 0; border-bottom: 2px solid #d9534f; padding-bottom: 10px; font-size: 20px;\">\n    🚨 Critical: Olist Pipeline Failure\n  </h2>\n  \n  <p style=\"color: #333; font-size: 15px; line-height: 1.5;\">\n    The automated <b>Olist Data Engine</b> has encountered an error. Please review the details below to begin troubleshooting.\n  </p>\n  \n  <table style=\"width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;\">\n    <tbody><tr style=\"background-color: #fcfcfc;\">\n      <td style=\"padding: 12px; border: 1px solid #eee; width: 30%;\"><strong>Severity:</strong></td>\n      <td style=\"padding: 12px; border: 1px solid #eee; color: #d9534f; font-weight: bold;\">High (Production)</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 12px; border: 1px solid #eee;\"><strong>Master Pipeline:</strong></td>\n      <td style=\"padding: 12px; border: 1px solid #eee; font-family: 'Courier New', monospace;\">@{triggerBody()?['PipelineName']}</td>\n    </tr>\n    <tr style=\"background-color: #fcfcfc;\">\n      <td style=\"padding: 12px; border: 1px solid #eee;\"><strong>Data Factory:</strong></td>\n      <td style=\"padding: 12px; border: 1px solid #eee;\">@{triggerBody()?['DataFactoryName']}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 12px; border: 1px solid #eee;\"><strong>Run ID:</strong></td>\n      <td style=\"padding: 12px; border: 1px solid #eee; color: #666; font-size: 12px;\">@{triggerBody()?['RunId']}</td>\n    </tr>\n    <tr style=\"background-color: #fff5f5;\">\n      <td style=\"padding: 12px; border: 1px solid #eee; vertical-align: top;\"><strong>Error Log:</strong></td>\n      <td style=\"padding: 12px; border: 1px solid #eee; color: #b71c1c; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.4;\">\n        @{triggerBody()?['ErrorMessage']}\n      </td>\n    </tr>\n  </tbody></table>\n\n  <div style=\"text-align: center; margin-top: 25px;\">\n    <a href=\"https://portal.azure.com\" style=\"background-color: #0078d4; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block; font-size: 14px;\">\n      View in Azure Monitor\n    </a>\n  </div>\n  \n  <hr style=\"border: 0; border-top: 1px solid #eee; margin-top: 30px;\">\n  <p style=\"font-size: 11px; color: #999; text-align: center; margin-top: 10px;\">\n    <b>Environment:</b> Production | <b>Project:</b> Olist E-Commerce Lakehouse<br>\n    This is an automated system alert. Do not reply to this email.\n  </p>\n</div>"
+                    },
+                    "path": "/v2/Mail"
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {
+                "gmail-1": {
+                    "id": "/subscriptions/[YOUR_SUBSCRIPTION_ID]/providers/Microsoft.Web/locations/southindia/managedApis/gmail",
+                    "connectionId": "/subscriptions/[YOUR_SUBSCRIPTION_ID]/resourceGroups/[YOUR_RESOURCE_GROUP]/providers/Microsoft.Web/connections/gmail",
+                    "connectionName": "gmail",
+                    "connectionProperties": {}
+                }
+            }
+        }
+    }
+}
