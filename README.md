@@ -119,13 +119,6 @@ This screenshot shows the 3-level nested hierarchy and the parallel execution of
 
 ---
 
-### **Automated Failure Alert**
-Example of the custom HTML email received when a pipeline failure is detected. It includes the Pipeline Name, Error Message, and the unique Run ID for rapid debugging.
-
-![Email Alert System](./assets/email_alert.png)
-
----
-
 ## 👨‍💻 About Me
 **Hruday Bhaskar Madanu** -
  *(Data Engineer | SQL, Data Warehousing & BI | Former Operations Professional)*
