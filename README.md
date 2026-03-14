@@ -121,7 +121,7 @@ This screenshot shows the 3-level nested hierarchy and the parallel execution of
 
 ## 👨‍💻 About Me
 **Hruday Bhaskar Madanu** -
- *(Data Engineer | SQL, Data Warehousing & BI | Former Operations Professional)*
+ *(Data Engineer | Former Operations Professional)*
 
 I am an Aspiring Data Engineer focused on building scalable, production-grade data platforms using SQL, Databricks, Azure. My expertise lies in designing Medallion architectures, optimizing PySpark performance, and implementing robust orchestration patterns.
 
