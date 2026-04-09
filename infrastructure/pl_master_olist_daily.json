@@ -182,7 +182,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/bronze/Creating_empty_tables_bronze_layer"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/bronze/Creating_empty_tables_bronze_layer"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -209,7 +209,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/bronze/Ingesting_source_in_bronze_tables"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/bronze/Ingesting_source_in_bronze_tables"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -255,7 +255,7 @@
                                     },
                                     "userProperties": [],
                                     "typeProperties": {
-                                        "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/silver/silver_transformation",
+                                        "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/silver/silver_transformation",
                                         "baseParameters": {
                                             "table_name": {
                                                 "value": "@item()",
@@ -299,7 +299,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/dim_states"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/dim_states"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -319,7 +319,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/dim_date"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/dim_date"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -368,7 +368,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/dim_sellers"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/dim_sellers"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -395,7 +395,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/dim_customers"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/dim_customers"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -422,7 +422,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/dim_orders"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/dim_orders"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -449,7 +449,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/dim_products"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/dim_products"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -476,7 +476,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/dim_location"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/dim_location"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -543,7 +543,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/fact_sales"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/fact_sales"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -570,7 +570,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/fact_payments"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/fact_payments"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
@@ -597,7 +597,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "notebookPath": "/Users/[YOUR_EMAIL}/Olist_E-commerce-(Azure_Databricks)/gold/fact_reviews"
+                            "notebookPath": "/[YOUR_FILE_PATH]/Olist_E-commerce-(Azure_Databricks)/gold/fact_reviews"
                         },
                         "linkedServiceName": {
                             "referenceName": "[parameters('Databricks_Olist')]",
