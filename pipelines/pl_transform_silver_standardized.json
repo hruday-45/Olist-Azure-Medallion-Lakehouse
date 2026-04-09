@@ -1,59 +1,53 @@
 {
-    "name": "Olist_Gold_Pl",
+    "name": "pl_transform_silver_standardized",
     "properties": {
         "activities": [
             {
-                "name": "dim_states_nb",
-                "type": "DatabricksNotebook",
+                "name": "Transformation_loop_silver_dimensions",
+                "type": "ForEach",
                 "dependsOn": [],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
                 "userProperties": [],
                 "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/dim_states"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "dim_date_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [],
-                "policy": {
-                    "timeout": "0.12:00:00",
-                    "retry": 0,
-                    "retryIntervalInSeconds": 30,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/dim_date"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "Wait1",
-                "type": "Wait",
-                "dependsOn": [
-                    {
-                        "activity": "dim_states_nb",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
+                    "items": {
+                        "value": "@createArray('olist_customers_dataset', 'olist_products_dataset', 'olist_sellers_dataset')",
+                        "type": "Expression"
                     },
+                    "activities": [
+                        {
+                            "name": "silver_dimensions_scd2",
+                            "type": "DatabricksNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.00:20:00",
+                                "retry": 2,
+                                "retryIntervalInSeconds": 180,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "notebookPath": "/Users/[YOUR_EMAIL]/Olist_E-commerce-(Azure_Databricks)/silver/silver_dimensions_scd2",
+                                "baseParameters": {
+                                    "table_name": {
+                                        "value": "@item()",
+                                        "type": "Expression"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "Databricks_Olist",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Transformation_loop_silver_facts",
+                "type": "ForEach",
+                "dependsOn": [
                     {
-                        "activity": "dim_date_nb",
+                        "activity": "Transformation_loop_silver_dimensions",
                         "dependencyConditions": [
                             "Succeeded"
                         ]
@@ -61,266 +55,43 @@
                 ],
                 "userProperties": [],
                 "typeProperties": {
-                    "waitTimeInSeconds": 1
-                }
-            },
-            {
-                "name": "dim_sellers_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait1",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/dim_sellers"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "dim_customers_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait1",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/dim_customers"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "dim_orders_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait1",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/dim_orders"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "dim_products_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait1",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/dim_products"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "dim_location_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait1",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/dim_location"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "Wait2",
-                "type": "Wait",
-                "dependsOn": [
-                    {
-                        "activity": "dim_sellers_nb",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
+                    "items": {
+                        "value": "@createArray('olist_orders_dataset', 'olist_order_items_dataset', 'olist_order_payments_dataset', 'olist_order_reviews_dataset', 'olist_geolocation_dataset', 'product_category_name_translation')",
+                        "type": "Expression"
                     },
-                    {
-                        "activity": "dim_customers_nb",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    },
-                    {
-                        "activity": "dim_orders_nb",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    },
-                    {
-                        "activity": "dim_products_nb",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    },
-                    {
-                        "activity": "dim_location_nb",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "userProperties": [],
-                "typeProperties": {
-                    "waitTimeInSeconds": 1
-                }
-            },
-            {
-                "name": "fact_sales_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait2",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/fact_sales"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "fact_payments_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait2",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/fact_payments"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
-                }
-            },
-            {
-                "name": "fact_reviews_nb",
-                "type": "DatabricksNotebook",
-                "dependsOn": [
-                    {
-                        "activity": "Wait2",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.00:10:00",
-                    "retry": 2,
-                    "retryIntervalInSeconds": 180,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "notebookPath": "/Repos/Production/Olist_E-commerce-(Azure_Databricks)/gold/fact_reviews"
-                },
-                "linkedServiceName": {
-                    "referenceName": "Databricks_Olist",
-                    "type": "LinkedServiceReference"
+                    "activities": [
+                        {
+                            "name": "silver_facts_upsert",
+                            "type": "DatabricksNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.00:20:00",
+                                "retry": 2,
+                                "retryIntervalInSeconds": 180,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "notebookPath": "/Users/[YOUR_EMAIL]/Olist_E-commerce-(Azure_Databricks)/silver/silver_facts_upsert",
+                                "baseParameters": {
+                                    "table_name": {
+                                        "value": "@item()",
+                                        "type": "Expression"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "Databricks_Olist",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
                 }
             }
         ],
-        "annotations": []
-    }
+        "annotations": [],
+        "lastPublishTime": "2026-04-03T19:30:16Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
 }

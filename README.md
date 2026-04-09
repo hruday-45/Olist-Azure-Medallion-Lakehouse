@@ -19,16 +19,23 @@ The solution emphasizes production-grade orchestration, parallel processing, str
 
 ## 🛠️ Tech Stack
 * **Storage:** Azure Data Lake Storage (ADLS) Gen2
+* **Format:** Delta Lake (Parquet with Transaction Logs)
 * **Orchestration:** Azure Data Factory (ADF)
-* **Compute:** Azure Databricks (Apache Spark)
-* **Alerting:** Azure Logic Apps (Custom HTML Email Notifications)
-* **Language:** PySpark
+* **Compute:** Azure Databricks (Apache Spark / PySpark)
+* **Alerting:** Azure Logic Apps (HTML Email Notifications)
+* **CI/CD:** GitHub Actions / Git Integration
 
 ---
 
 ## 💡 Key Engineering Features
 
-### **1. Multi-Level Orchestration**
+### **1. Advanced Historical Tracking (SCD Type 2)**
+Unlike basic overwrite pipelines, this architecture tracks the lifecycle of customers, sellers, and products.
+* **Epoch Strategy:** Implemented a `1900-01-01` start-date for initial loads. This ensures historical orders (2016-2018) correctly join with dimension records.
+* **Surrogate Keys:** Generated unique MD5 hashes based on the Natural ID and Start Date, enabling the Fact table to perform "Point-in-Time" lookups.
+
+
+### **2. Multi-Level Orchestration**
 The pipeline uses a structured orchestration hierarchy:
 * **Master Pipeline:** The "Guardian" that triggers the flow and handles global error catching.
 * **Sub-Orchestrator:** Manages the sequential flow (Bronze → Silver → Gold).
@@ -37,14 +44,14 @@ The pipeline uses a structured orchestration hierarchy:
 
 
 
-### **2. Centralized Failure Handling & Smart Alerting**
+### **3. Centralized Failure Handling & Smart Alerting**
 Instead of manual log monitoring, I built a custom monitoring system. If any notebook fails at the "Worker" level:
 * The error "bubbles up" to the Master Pipeline.
 * A **Web Activity** sends the specific error message and **Run ID** to an **Azure Logic App**.
 * A professionally formatted **HTML email** is sent to the data team for immediate troubleshooting.
 
 
-### **3. Data Integrity & Strict Schema Enforcement**
+### **4. Data Integrity & Strict Schema Enforcement**
 
 Instead of allowing schema drift:
 
@@ -55,24 +62,19 @@ Instead of allowing schema drift:
 * Schema-related failures trigger automated alerts for manual reconciliation.
 
 
-### **4. Global Idempotency & Self-Healing Pipelines**
+### **5. Global Idempotency & Self-Healing Pipelines**
 I implemented **Delta Lake MERGE (Upsert)** logic across **all layers** (Bronze, Silver, Gold). This ensures that the entire pipeline is idempotent—meaning it can be re-run multiple times without creating duplicate records or data inconsistencies.
-
-* **Bronze Layer:** Prevents duplicate ingestion if the same source file is processed twice.
-* **Silver Layer:** Updates existing records with cleaned data while maintaining a unique set of standardized records.
-* **Gold Layer:** Ensures Fact and Dimension tables are always in sync with the latest business logic.
 
 ```python
 # Example of the Global Upsert Pattern used across all layers
-if DeltaTable.isDeltaTable(spark, table_path):
-    dt = DeltaTable.forPath(spark, table_path)
-    (dt.alias("target")
-     .merge(df.alias("source"), "target.primary_key = source.primary_key")
-     .whenMatchedUpdateAll()
-     .whenNotMatchedInsertAll()
-     .execute())
-else:
-    df.write.format("delta").mode("overwrite").save(table_path)
+# Implementation of Null-Safe Merge logic
+change_condition = " OR ".join([f"NOT (target.{c} <=> source.{c})" for c in data_cols])
+
+(dt_gold.alias("target")
+ .merge(df_final.alias("source"), "target.product_key = source.product_key")
+ .whenMatchedUpdateAll(condition = change_condition)
+ .whenNotMatchedInsertAll()
+ .execute())
 ```
 
 ---
@@ -94,16 +96,16 @@ else:
 * Modular layer separation
 * Easy onboarding of new datasets
 
-**Reliability**
+**Reliability:**
 * Automated alerting
 * Retry policies
 * Failure propagation strategy
 
-**Performance**
+**Performance:**
 * Parallelized Gold processing
 * Delta Lake optimization
 
-**Maintainability**
+**Maintainability:**
 * Clear separation of concerns
 * Idempotent pipelines
 * Controlled schema governance
@@ -116,13 +118,6 @@ else:
 This screenshot shows the 3-level nested hierarchy and the parallel execution of the Gold layer facts and dimensions.
 
 ![Azure Data Factory Pipeline](./assets/adf_pipeline.png)
-
----
-
-### **Automated Failure Alert**
-Example of the custom HTML email received when a pipeline failure is detected. It includes the Pipeline Name, Error Message, and the unique Run ID for rapid debugging.
-
-![Email Alert System](./assets/email_alert.png)
 
 ---
 
